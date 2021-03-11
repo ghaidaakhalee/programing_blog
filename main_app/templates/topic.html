@@ -1,0 +1,132 @@
+{% extends 'base.html' %}
+ {% load static %} 
+ {% block title%}
+  {{topic.subject}}
+{% endblock%} 
+
+{% block content %}
+
+  <!--Main layout-->
+  <main class="mt-8 pt-4">
+    <div class="container">
+
+      <!--Section: Post-->
+      <section class="mt-4">
+
+        <div>
+
+          <!--Grid column-->
+          <div class="mb-8">
+
+            <!--Featured Image-->
+            <div class="card mb-4 wow fadeIn" >
+
+              <img src="{{topic.img}}" class="img-fluid" alt="{{topic.subject}}">
+
+            </div>
+            <!--/.Featured Image-->
+
+
+            <!--Card-->
+            <div class="card mb-4 wow fadeIn">
+
+              <!--Card content-->
+              <div class="card-body">
+                 {% if topic.created_by == user %}
+                <p Align="right">
+                  <a href="{% url 'update_topic'  topic.category_id topic.id  %}" class="replay btn btn-sm btn-outline-success">edit</a>
+                  <a href="{% url 'delete_topic'  topic.category_id topic.id  %}" class="replay btn btn-sm btn-outline-danger">delete</a>
+                </p>
+                {%endif%}
+                <p class="h1 my-4">{{topic.subject}} </p>
+
+
+                <blockquote class="blockquote">
+                  <footer class="blockquote-footer">Created by : 
+                    <cite title="Source Title">{{topic.created_by.username}}</cite>
+                    <p style="text-align: right;" ></p>
+                     {{topic.created_dt}}</small> </cite>
+                  </footer>
+                </blockquote>
+
+
+                <p>{{topic.content_text}}</p>
+
+              </div>
+
+            </div>
+              
+
+
+            <!--/.Card-->
+            {% if topic.posts.all %}
+             <h3>comments</h3>
+             {%endif%}
+            <!--commentCard-->
+             {% for post in topic.posts.all %}
+            <div class="card mb-4 wow fadeIn">
+
+              <div class="card-header font-weight-bold">
+                <span>{{post.created_by.username}} </span>
+              </div>
+
+              <!--commentCard content-->
+              <div class="card-body">
+
+                <div class="media d-block d-md-flex mt-3">
+                  <img class="d-flex mb-3 mx-auto z-depth-1" src="{% static 'img/user.png' %}"
+                    alt="Generic placeholder image" style="width: 100px;">
+                  <div class="media-body text-center text-md-left ml-md-3 ml-0">
+                    <h5 class="mt-0 font-weight-bold">{{post.created_dt}}
+                    </h5>
+                    {{post.message}}
+                  </div>
+                  {% if post.created_by == user %}
+                <p Align="right">
+                  <a href="{% url 'update_post' post.topic.category_id post.topic_id post.id %}" class="replay btn btn-sm btn-outline-success">edit</a>
+                  <a href="{%url 'delete_post' post.topic.category_id post.topic_id post.id%}" class="replay btn btn-sm btn-outline-danger">delete</a>
+                </p>
+                {%endif%}
+                </div>
+
+              </div>
+
+            </div>
+             {%endfor%}
+            <!--/.commentCard-->
+
+               <!--/.Comments-->
+
+
+            <h3>Leave a Comment </h3>
+            <!--CreateComment-->
+            <div class="card mb-3 wow fadeIn">
+              
+              <div class="card-body">
+              {% if user.is_authenticated %}
+                <!-- Default form comment -->
+                
+                  <!-- Comment -->
+                  <form method="post" class="form-group">
+                    <label for="replyFormComment">&nbsp; &nbsp; &nbsp;&nbsp; &nbsp;  &nbsp; &nbsp; Your comment</label>
+                    {% csrf_token %}
+               {% include 'includes/form.html' %}
+                  <div class="text-center mt-4">
+                    <button
+                  type="submit"
+                  class="btn btn-info btn-md">
+                  Post Comment </button>
+                  </div>
+                </form>
+                 {% endif%}
+                <!-- Default form comment -->
+              </div>
+            </div>
+            
+
+
+        
+
+
+
+{% endblock%}

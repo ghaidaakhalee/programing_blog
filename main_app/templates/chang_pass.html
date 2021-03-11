@@ -1,0 +1,24 @@
+
+{% extends 'base.html' %}
+{% block title%} change password{% endblock%}
+
+{% block breadcrumb %} 
+    <li class="breadcrumb-item active">change password</li>
+{% endblock%}
+{% block content %}
+    <div class="container">
+        <form method="POST" novalidate>
+            {% csrf_token%}
+            {{form.as_p}}
+           <button type="submit" class="btn btn-primary">change password</button>
+        </form>
+    </div>
+    {% endblock%}
+
+    
+
+
+
+
+
+
